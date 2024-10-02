@@ -1,50 +1,21 @@
 # SARIF SAST Scans Tab
 
-See `vss-extension.md` for public facing info. This is for contributors/developers.
+Fork von [https://github.com/microsoft/sarif-azuredevops-extension](https://github.com/microsoft/sarif-azuredevops-extension ) aufgrund der Problematik, dass bei mehreren Scannern, welche SARIF Logs im CodeAnalysisLogs Artifact publishen, dann die Dateinamen der sarif-Dateien nicht mehr angezeigt werden.
+
+Dies ist hier in einem Issue beschrieben:
+[https://github.com/microsoft/sarif-azuredevops-extension/issues/45](https://github.com/microsoft/sarif-azuredevops-extension/issues/450)
+
+## Deployment
+Aktuell gibt es keine Pipeline die das Projekt baut. Daher sind folgende manuellen Schritte notwendig:
+
+1. npm installieren
+2. pwsh im Projektverzeichnis als Local Admin öffnen
+3. ` npm config set proxy http://http-proxy.niedersachsen.de:8080`
+4. `npm config set https-proxy http://http-proxy.niedersachsen.de:8080`
+5. TFS Extension Framework mit `npm install -g tfx-cli` installieren
+6. `npx webpack` ausführen - dist Verzeichnis wird angelegt
+7. Version in `vss-extension.prod.json` erhöhen
+8. Version publishen mit `npx tfx extension create --output-path: vsix --manifests vss-extension.json vss-extension.prod.json`
 
 
-### Development: DevOps Dev
-* `npm run publish-dev`
-* go to: `https://dev.azure.com/jeffkingms/Project%20Zero/_workitems/edit/1/`
-
-
-### Development: DevOps BaseUri
-* `npm run publish-dev` with `baseUri`
-* go to: `https://localhost:8080` and bypass the chrome warning.
-* go to: `https://dev.azure.com/jeffkingms/Project%20Zero/_workitems/edit/1/`
-
-
-### Deployment
-Verify `vss-extension.prod.json` property `version` is incremented. If not, you risk overriting an old `vsix`.
-```
-npx webpack
-npx tfx extension create --output-path: vsix --overrides-file vss-extension.prod.json
-```
-
-This creates a file in your `./vsix` folder named `sariftools.scans-0.1.0.vsix` (version number will differ).
-
-Upload the `vsix` file to `https://marketplace.visualstudio.com/manage/publishers/YOUR_PUBLISHER_ID`. On that page, find the matching extension, choose `⋯`, and choose `Update`.
-
-Remember to commit any `vss-extension.json` `version` changes.
-
-### New API
-import('azure-devops-extension-sdk').init() results in "No handler found on any channel for message"
-and "Error: Cannot get registered instance for : JeffKingO.scans-dev.workitem-tab"
-
-```
-import * as SDK from 'azure-devops-extension-sdk'
-import { IWorkItemFormService, WorkItemTrackingServiceIds } from 'azure-devops-extension-api/WorkItemTracking'
-
-SDK.init({
-	applyTheme: true,
-	loaded: true,
-})
-;(async () => {
-	await SDK.ready()
-	console.info('Version', SDK.getExtensionContext().version)
-
-	const workItem = await SDK.getService<IWorkItemFormService>(WorkItemTrackingServiceIds.WorkItemFormService)
-	const relations = await workItem.getWorkItemRelations()
-	console.log(relations)
-})()
-```
+Anschließend kann das fertige `vsix` Paket auf den Azure DevOps Server [hochgeladen](https://intra.devops.it.niedersachsen.de/tfs/_gallery/manage) werden. Dazu muss man Collection Admin sein. Ist die Extension schon installiert erfolgt das Update über das Menü an dem jeweiligen Eintrag.
