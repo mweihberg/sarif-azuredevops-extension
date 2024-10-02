@@ -2,7 +2,7 @@
 	"publisher": "itn",
 	"id": "scans",
 	"name": "ITN SARIF SAST Scans Tab",
-	"version": "0.1",
+	"version": "0.1.1",
 	"public": true,
 	"contributions": [
 		{
@@ -12,7 +12,7 @@
 				"ms.vss-build-web.build-results-view"
 			],
 			"properties": {
-				"name": "Scans",
+				"name": "Scans ITN",
 				"uri": "build.html"
 			}
 		},
@@ -23,7 +23,7 @@
 				"ms.vss-work-web.work-item-form"
 			],
 			"properties": {
-				"name": "Scans",
+				"name": "Scans ITN",
 				"uri": "workItem.html"
 			}
 		}
