@@ -1,14 +1,16 @@
 {
-	"publisher": "sariftools",
+	"publisher": "itn",
 	"id": "scans",
-	"name": "SARIF SAST Scans Tab",
-	"version": "0.5.6",
+	"name": "ITN SARIF SAST Scans Tab",
+	"version": "0.1",
 	"public": true,
 	"contributions": [
 		{
 			"id": "build-tab",
 			"type": "ms.vss-build-web.build-results-tab",
-			"targets": ["ms.vss-build-web.build-results-view"],
+			"targets": [
+				"ms.vss-build-web.build-results-view"
+			],
 			"properties": {
 				"name": "Scans",
 				"uri": "build.html"
@@ -17,7 +19,9 @@
 		{
 			"id": "workitem-tab",
 			"type": "ms.vss-work-web.work-item-form-page",
-			"targets": ["ms.vss-work-web.work-item-form"],
+			"targets": [
+				"ms.vss-work-web.work-item-form"
+			],
 			"properties": {
 				"name": "Scans",
 				"uri": "workItem.html"
